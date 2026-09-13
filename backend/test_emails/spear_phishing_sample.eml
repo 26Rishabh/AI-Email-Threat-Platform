@@ -1,0 +1,50 @@
+From: "HR Department" <hr@yourcompany-corp.net>
+To: all-staff@yourcompany.com
+Subject: Important: Mandatory Salary Review Form - Submit by EOD
+Date: Wed, 12 Jun 2024 08:45:00 +0000
+Message-ID: <hr-notice-2024@external-mailer.xyz>
+Reply-To: hr-forms@quickform-submit.net
+Return-Path: <bounce@external-mailer.xyz>
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+X-Originating-IP: 203.0.113.50
+Authentication-Results: mx.yourcompany.com;
+   spf=softfail (yourcompany.com: 203.0.113.50 is not in the authorized range)
+   dkim=none;
+   dmarc=fail (p=QUARANTINE) header.from=yourcompany-corp.net
+Received: from external-mailer.xyz (external-mailer.xyz [203.0.113.50])
+        by mx.yourcompany.com with ESMTP id imp123;
+        Wed, 12 Jun 2024 08:45:00 +0000
+
+<html>
+<body>
+<p>Dear Employee,</p>
+
+<p>As part of our <strong>annual compensation review</strong>, all employees 
+are required to submit their updated banking information for direct deposit 
+by <strong>End of Day TODAY</strong>.</p>
+
+<p>Please click the link below to access the secure HR portal and submit 
+your information:</p>
+
+<p><a href="https://yourcompany-hrportal.external-mailer.xyz/salary-form">
+https://yourcompany-hrportal.external-mailer.xyz/salary-form</a></p>
+
+<p>You will need to provide:</p>
+<ul>
+<li>Employee ID</li>
+<li>Bank account number</li>
+<li>Routing number</li>
+<li>Social Security Number (for tax verification)</li>
+</ul>
+
+<p><strong>IMPORTANT:</strong> Failure to submit this form today will 
+result in a delay in your next paycheck. This cannot be undone.</p>
+
+<p>Do NOT discuss this email with IT — this is a confidential HR process.</p>
+
+<p>Regards,<br>
+Human Resources Department<br>
+YourCompany Corp</p>
+</body>
+</html>

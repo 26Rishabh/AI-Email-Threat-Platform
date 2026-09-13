@@ -1,0 +1,46 @@
+From: "PayPal Security" <security@paypa1-alert.com>
+To: victim@example.com
+Subject: =?utf-8?q?=E2=9A=A0=EF=B8=8F_Urgent=3A_Your_Account_Has_Been_Limited?=
+Date: Mon, 10 Jun 2024 09:23:45 -0500
+Message-ID: <abc123@mail-server.ru>
+Reply-To: collect-info@attacker-phish.com
+Return-Path: <bounce@paypa1-alert.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: The Bat! 9.3
+Authentication-Results: mx.example.com;
+   spf=fail (example.com: domain of security@paypa1-alert.com does not designate 192.0.2.1 as permitted sender)
+   dkim=fail header.i=@paypa1-alert.com;
+   dmarc=fail (p=REJECT sp=REJECT dis=QUARANTINE) header.from=paypa1-alert.com
+Received: from mail-server.ru (mail-server.ru [192.0.2.1])
+        by mx.example.com with ESMTP id x1234abcd;
+        Mon, 10 Jun 2024 09:23:45 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail-server.ru with ESMTP id internal9876;
+        Mon, 10 Jun 2024 14:23:40 +0000
+
+Dear PayPal Customer,
+
+We have noticed unusual activity on your PayPal account. 
+Your account has been LIMITED due to suspicious transactions.
+
+ACT NOW — Your account will be permanently suspended within 24 hours 
+if you do not verify your information immediately.
+
+Click the link below to restore your account access:
+https://paypa1-alert.com/secure/login/verify?token=xyz123
+https://secure-paypal-login.verification-check.com/restore
+
+You must also confirm your:
+- Full name
+- Credit card number
+- Social Security Number
+- Date of birth
+- Password
+
+Failure to respond within 24 HOURS will result in PERMANENT account closure.
+
+This is an automated security alert.
+PayPal Security Team
+
+WARNING: Do not share this email with anyone.

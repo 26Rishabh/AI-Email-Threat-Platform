@@ -1,0 +1,649 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Email Threat Platform — Explainer &amp; Build Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 40px 20px 60px;
+  }
+  .page { max-width: 760px; margin: 0 auto; }
+
+  h1 { font-size: 22px; font-weight: 700; color: #1f2328; margin-bottom: 6px; }
+  h2 { font-size: 17px; font-weight: 700; color: #1f2328; margin: 36px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb; }
+  h3 { font-size: 14.5px; font-weight: 700; color: #1f2328; margin: 20px 0 6px; }
+  p  { margin-bottom: 10px; color: #1f2328; }
+  .subtitle { color: #57606a; font-size: 13.5px; margin-bottom: 28px; }
+
+  /* WHAT IS THIS PROJECT */
+  .intro-box {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #3b82d4;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+  .intro-box p { margin: 0; }
+
+  /* ANALOGY BOX */
+  .analogy {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 12px 0 18px;
+    font-size: 13.5px;
+    color: #78350f;
+  }
+  .analogy strong { color: #92400e; }
+
+  /* MODULE TABLE */
+  .module-grid {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0;
+    margin-bottom: 10px;
+  }
+  .module-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    background: #3b82d4;
+    border-radius: 4px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .module-body { padding-left: 10px; }
+  .module-title { font-weight: 700; font-size: 14px; color: #1f2328; }
+  .module-desc { font-size: 13.5px; color: #57606a; margin-top: 2px; }
+
+  /* TECH TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 13.5px; }
+  thead tr { background: #f7f8fa; }
+  th { text-align: left; padding: 8px 12px; font-weight: 600; color: #1f2328; border: 1px solid #e5e7eb; }
+  td { padding: 8px 12px; border: 1px solid #e5e7eb; color: #1f2328; vertical-align: top; }
+  td.tech { font-weight: 600; color: #3b82d4; }
+  td.why { color: #57606a; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  /* PHASE CARDS */
+  .phase {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .phase-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .phase-title { font-weight: 700; font-size: 15px; color: #1f2328; }
+  .phase-sub { font-size: 12.5px; color: #57606a; }
+  .phase-body { padding: 14px 16px; }
+  .phase-body ul { padding-left: 18px; margin: 0; }
+  .phase-body li { font-size: 13.5px; color: #1f2328; margin-bottom: 5px; }
+  .phase-body li span { color: #57606a; }
+  .deliverable {
+    display: inline-block;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 20px;
+    margin-top: 10px;
+  }
+
+  /* BADGE COLORS PER PHASE */
+  .p1 { background: #7c5cd8; }
+  .p2 { background: #3b82d4; }
+  .p3 { background: #0891b2; }
+  .p4 { background: #059669; }
+  .p5 { background: #d97706; }
+  .p6 { background: #dc2626; }
+
+  /* PIPELINE */
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin: 14px 0 18px;
+  }
+  .pipe-step {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1f2328;
+  }
+  .pipe-arrow { color: #57606a; font-size: 16px; }
+
+  /* LIMITATIONS */
+  .warn-box {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    border-left: 4px solid #f43f5e;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13.5px;
+    color: #881337;
+  }
+  .warn-box ul { padding-left: 16px; margin-top: 6px; }
+  .warn-box li { margin-bottom: 4px; }
+
+  /* MVP CHECKLIST */
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 20px;
+    margin: 10px 0 18px;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 13.5px;
+    color: #1f2328;
+  }
+  .check-icon { color: #059669; font-weight: 700; flex-shrink: 0; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 12px;
+    color: #57606a;
+  }
+
+  .sep { height: 1px; background: #e5e7eb; margin: 24px 0; }
+
+  .tag {
+    display: inline-block;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 2px 2px 2px 0;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>AI-Powered Email Threat Detection &amp; Forensic Intelligence Platform</h1>
+  <p class="subtitle">Plain-English explanation of what you are building, every technology used, every module explained, and a full phase-by-phase build plan.</p>
+
+  
+  <div class="intro-box">
+    <p><strong>In one sentence:</strong> You are building a website where a user can upload a suspicious email file, and the system automatically investigates it — like a digital forensics lab — telling you whether it's a phishing attack, who sent it, what fake links it contains, where the mail server is located, and producing a PDF investigation report.</p>
+  </div>
+
+  <div class="analogy">
+    <strong>Think of it this way:</strong> Just like a forensic scientist examines a crime scene and produces an evidence report, your platform examines a suspicious email and produces a digital evidence report. Instead of fingerprints, you're looking at email headers, authentication stamps, suspicious links, and IP addresses.
+  </div>
+
+  
+  <h2>How the System Works (The Flow)</h2>
+  <p>Every time someone uploads an email, it passes through this chain of steps:</p>
+  <div class="pipeline">
+    <span class="pipe-step">Upload .eml</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">Parse Email</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">Header Forensics</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">SPF/DKIM/DMARC</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">AI/ML Detection</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">URL Analysis</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">IP Intelligence</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">Risk Score</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">Dashboard</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">PDF Report</span>
+  </div>
+
+  
+  <h2>All 13 Modules — What Each One Does</h2>
+
+  <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:10px">
+
+    <div class="module-grid">
+      <div class="module-num">1</div>
+      <div class="module-body">
+        <div class="module-title">Email Ingestion &amp; Parsing</div>
+        <div class="module-desc">Accepts the <code>.eml</code> file upload and breaks it apart into its components — sender, recipient, subject, headers, body text, URLs, and attachments. Like opening an envelope and separating the letter from the envelope, stamp, and postmark.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">2</div>
+      <div class="module-body">
+        <div class="module-title">Email Header Forensics</div>
+        <div class="module-desc">Email headers are invisible metadata — like the postal routing stamps on a package. This module reads them to find anomalies: does the "From" address match the "Reply-To"? Did the email travel through unexpected servers? Are there signs of forgery?</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">3</div>
+      <div class="module-body">
+        <div class="module-title">SPF / DKIM / DMARC Analysis</div>
+        <div class="module-desc">These are three email authentication protocols. SPF checks if the sending server is authorized. DKIM checks if the email was digitally signed and not tampered with. DMARC ties them together with a policy. A FAIL on any of these is a red flag — like a package arriving without the official security seal.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">4</div>
+      <div class="module-body">
+        <div class="module-title">AI / ML Email Threat Detection</div>
+        <div class="module-desc">This is the "brain" of the system. A machine-learning model trained on thousands of phishing and legitimate emails reads the email body and detects patterns like urgency ("Act now!"), credential requests ("Enter your password"), impersonation language, and social engineering. It classifies the email as LEGITIMATE, SUSPICIOUS, PHISHING, etc.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">5</div>
+      <div class="module-body">
+        <div class="module-title">URL Analysis</div>
+        <div class="module-desc">Extracts every link from the email and checks it. Is the domain a lookalike (e.g., "secure-bank-Iogin.com" with a capital I instead of lowercase L)? Does it use suspicious keywords like "verify", "login", "password"? Is it an IP address disguised as a link? All this is flagged.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">6</div>
+      <div class="module-body">
+        <div class="module-title">Domain Intelligence</div>
+        <div class="module-desc">Looks up DNS records for suspicious domains — like looking up a company's registered address. Finds who owns the domain, what mail servers it uses, what IP addresses it points to. This helps reveal fake domains that were just registered for a one-time attack.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">7</div>
+      <div class="module-body">
+        <div class="module-title">IP &amp; Infrastructure Intelligence</div>
+        <div class="module-desc">Extracts IP addresses from the email's routing path (the "Received" headers). For each IP, it fetches the approximate country, region, ISP, and ASN (autonomous system number — basically which network company owns that IP block). This maps the mail infrastructure, not the attacker's home address.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">8</div>
+      <div class="module-body">
+        <div class="module-title">Threat Intelligence &amp; Correlation</div>
+        <div class="module-desc">Connects the dots: if the email's suspicious URL and the domain in the "From" header both resolve to the same IP address, that's a strong correlated signal. This module builds a graph of relationships between all indicators found.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">9</div>
+      <div class="module-body">
+        <div class="module-title">Threat Risk Scoring</div>
+        <div class="module-desc">Combines all signals into a single score out of 100. Each module contributes points. The system also explains why — listing the exact indicators that drove the score up. This makes the AI "explainable", which is critical in security investigations.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">10</div>
+      <div class="module-body">
+        <div class="module-title">Investigation Dashboard</div>
+        <div class="module-desc">The main screen analysts see after analysis — a clean web page showing risk score, classification, sender info, authentication results, IP intelligence, and threat indicators all in one place. Think of it as the "crime board" in detective shows.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">11</div>
+      <div class="module-body">
+        <div class="module-title">Investigation Graph</div>
+        <div class="module-desc">A visual network diagram showing how indicators are connected — email → domain → IP → ISP. Makes it easy to see at a glance how the infrastructure is linked. Built using a graph visualization library.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">12</div>
+      <div class="module-body">
+        <div class="module-title">Evidence Preservation</div>
+        <div class="module-desc">When the email is uploaded, the system calculates its SHA-256 hash — a unique digital fingerprint of the file. If the file is tampered with later, the hash will change, proving tampering. Stores Case ID, timestamps, and analysis results for chain-of-custody purposes.</div>
+      </div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-num">13</div>
+      <div class="module-body">
+        <div class="module-title">Forensic PDF Report Generation</div>
+        <div class="module-desc">With one click, generates a formal PDF document containing every finding — case info, authentication results, AI classification, URL analysis, IP intelligence, threat indicators, and a written conclusion. This report can be submitted as documentation in an investigation.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sep"></div>
+
+  
+  <h2>Technology Stack — What Each Tool Is &amp; Why It's Used</h2>
+
+  <table>
+    <thead><tr><th>Technology</th><th>What it is</th><th>Why it's used here</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tech">React.js</td>
+        <td>A JavaScript library for building web user interfaces.</td>
+        <td class="why">Powers the interactive frontend — the dashboard, upload page, graphs, and report button. It re-renders only what changes, making the UI fast.</td>
+      </tr>
+      <tr>
+        <td class="tech">Tailwind CSS</td>
+        <td>A utility-based CSS framework for styling web pages.</td>
+        <td class="why">Lets you build a professional-looking UI quickly without writing custom CSS files. Classes like <code>text-red-600</code> or <code>p-4</code> style elements inline.</td>
+      </tr>
+      <tr>
+        <td class="tech">Python + FastAPI</td>
+        <td>Python is the programming language. FastAPI is a modern web framework for building APIs.</td>
+        <td class="why">The backend — handles file uploads, runs all analysis, talks to the database, calls external APIs. FastAPI is chosen because it's fast, auto-generates documentation, and works great with Python ML libraries.</td>
+      </tr>
+      <tr>
+        <td class="tech">Scikit-learn</td>
+        <td>Python's most popular machine learning library.</td>
+        <td class="why">Trains and runs the phishing classification model. Algorithms like Naive Bayes, Random Forest, or SVM can classify emails based on features extracted from the text.</td>
+      </tr>
+      <tr>
+        <td class="tech">Python NLP Libraries (NLTK / spaCy)</td>
+        <td>Tools for processing and understanding human language in Python.</td>
+        <td class="why">Cleans the email body text, extracts keywords, detects urgency/threat language patterns, and converts text into numbers that ML models can process.</td>
+      </tr>
+      <tr>
+        <td class="tech">Python email library</td>
+        <td>Python's built-in library for parsing email files.</td>
+        <td class="why">Reads the raw <code>.eml</code> file and splits it into headers, body, attachments, etc. It handles all the messy MIME encoding that real emails use.</td>
+      </tr>
+      <tr>
+        <td class="tech">MongoDB</td>
+        <td>A NoSQL database that stores data as flexible JSON-like documents.</td>
+        <td class="why">Stores analysis results, case information, evidence hashes, and historical records. NoSQL is ideal here because each email's analysis output has a different structure.</td>
+      </tr>
+      <tr>
+        <td class="tech">REST APIs</td>
+        <td>A standard way for the frontend and backend to communicate over HTTP.</td>
+        <td class="why">The React frontend sends requests to FastAPI endpoints (e.g., <code>POST /analyze</code>) and receives JSON results to display. This separation means frontend and backend can be developed independently.</td>
+      </tr>
+      <tr>
+        <td class="tech">IP Geolocation API (ip-api / IPinfo)</td>
+        <td>A free/paid web service that returns location and ISP data for an IP address.</td>
+        <td class="why">The system calls this API with each extracted IP address and gets back approximate country, region, ISP, and ASN. No need to build this database yourself.</td>
+      </tr>
+      <tr>
+        <td class="tech">dnspython</td>
+        <td>A Python library for making DNS queries.</td>
+        <td class="why">Looks up DNS records (A, MX, NS, TXT) for suspicious domains to get their IP addresses, mail servers, and SPF records.</td>
+      </tr>
+      <tr>
+        <td class="tech">Leaflet + OpenStreetMap</td>
+        <td>An open-source JavaScript map library using free map tiles.</td>
+        <td class="why">Renders the IP geolocation on an interactive map on the dashboard. No Google Maps API key required — completely free.</td>
+      </tr>
+      <tr>
+        <td class="tech">Cytoscape.js / React Flow</td>
+        <td>JavaScript libraries for drawing interactive network/graph diagrams.</td>
+        <td class="why">Draws the investigation graph showing how email → domain → IP → ISP nodes are connected.</td>
+      </tr>
+      <tr>
+        <td class="tech">ReportLab</td>
+        <td>A Python library for generating PDF files programmatically.</td>
+        <td class="why">Builds the forensic PDF report on the server side from the analysis data, with proper formatting, sections, and tables.</td>
+      </tr>
+      <tr>
+        <td class="tech">JWT (JSON Web Tokens)</td>
+        <td>A standard for securely transmitting user identity information.</td>
+        <td class="why">Handles authentication — when a user logs in, the server issues a JWT token. The frontend sends this token with every request to prove who the user is.</td>
+      </tr>
+      <tr>
+        <td class="tech">Vercel</td>
+        <td>A free cloud platform for deploying frontend web apps.</td>
+        <td class="why">Deploy the React frontend for free. Every push to GitHub auto-deploys. Gives you a public URL instantly.</td>
+      </tr>
+      <tr>
+        <td class="tech">Render</td>
+        <td>A free cloud platform for deploying backend services.</td>
+        <td class="why">Hosts the FastAPI backend. Free tier works well for a college project demonstration.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sep"></div>
+
+  
+  <h2>Important Limitation Built Into the Project</h2>
+  <div class="warn-box">
+    <strong>The system is an investigative assistance tool, NOT an attribution system.</strong>
+    <ul>
+      <li>It will <strong>NOT</strong> claim to know who physically sent the email.</li>
+      <li>It will <strong>NOT</strong> claim the IP geolocation is the attacker's exact location.</li>
+      <li>It will only say: <em>"The observed mail infrastructure is approximately geolocated to this region."</em></li>
+      <li>This keeps the project technically honest and legally defensible — important for a forensics tool.</li>
+    </ul>
+  </div>
+
+  <div class="sep"></div>
+
+  
+  <h2>MVP — What Must Be Built (Minimum Viable Product)</h2>
+  <div class="check-grid">
+    <div class="check-item"><span class="check-icon">✓</span> .eml file upload</div>
+    <div class="check-item"><span class="check-icon">✓</span> Email parsing</div>
+    <div class="check-item"><span class="check-icon">✓</span> Header analysis</div>
+    <div class="check-item"><span class="check-icon">✓</span> SPF/DKIM/DMARC analysis</div>
+    <div class="check-item"><span class="check-icon">✓</span> URL extraction &amp; analysis</div>
+    <div class="check-item"><span class="check-icon">✓</span> Basic phishing ML model</div>
+    <div class="check-item"><span class="check-icon">✓</span> Risk score calculation</div>
+    <div class="check-item"><span class="check-icon">✓</span> IP extraction &amp; geolocation</div>
+    <div class="check-item"><span class="check-icon">✓</span> MongoDB storage</div>
+    <div class="check-item"><span class="check-icon">✓</span> Investigation dashboard</div>
+    <div class="check-item"><span class="check-icon">✓</span> PDF forensic report</div>
+    <div class="check-item"><span class="check-icon">✓</span> SHA-256 evidence hash</div>
+  </div>
+
+  <div class="sep"></div>
+
+  
+  <h2>Phase-by-Phase Build Plan</h2>
+  <p style="color:#57606a;font-size:13.5px;margin-bottom:20px">6 phases, ordered by dependency. Each phase produces something you can run and test before moving to the next.</p>
+
+  
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge p1">Phase 1</span>
+      <div>
+        <div class="phase-title">Project Foundation &amp; Email Parsing Engine</div>
+        <div class="phase-sub">Backend scaffolding + core email parsing + database setup</div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <ul>
+        <li><strong>Set up Python + FastAPI project</strong> <span>— folder structure, virtual environment, dependencies</span></li>
+        <li><strong>Set up MongoDB</strong> <span>— local instance + connection, define collections (cases, analyses)</span></li>
+        <li><strong>Build Module 1 — Email Parser</strong> <span>— parse .eml files, extract headers, body, URLs, attachments</span></li>
+        <li><strong>Build Module 2 — Header Forensics</strong> <span>— detect Reply-To mismatch, routing anomalies, suspicious relays</span></li>
+        <li><strong>Build Module 3 — SPF/DKIM/DMARC Analysis</strong> <span>— parse Authentication-Results header, flag failures</span></li>
+        <li><strong>Build Module 12 — Evidence Preservation</strong> <span>— SHA-256 hash, Case ID generation, upload timestamp storage</span></li>
+        <li><strong>Expose REST API endpoints</strong> <span>— POST /upload, GET /case/:id</span></li>
+        <li><strong>Write test .eml files</strong> <span>— sample phishing + legitimate emails to test parsing</span></li>
+      </ul>
+      <span class="deliverable">✓ Deliverable: Working backend that parses any .eml and returns structured JSON</span>
+    </div>
+  </div>
+
+  
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge p2">Phase 2</span>
+      <div>
+        <div class="phase-title">AI / ML Threat Detection Model</div>
+        <div class="phase-sub">Train phishing classifier + integrate into backend pipeline</div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <ul>
+        <li><strong>Acquire training dataset</strong> <span>— use public phishing email datasets (SpamAssassin, Enron, PhishTank CSV)</span></li>
+        <li><strong>Preprocess emails with NLP</strong> <span>— tokenization, stop-word removal, TF-IDF vectorization using NLTK/scikit-learn</span></li>
+        <li><strong>Train classification model</strong> <span>— Naive Bayes or Random Forest, evaluate accuracy/precision/recall</span></li>
+        <li><strong>Build Module 4 — AI Detection</strong> <span>— load trained model, classify email body, return label + confidence %</span></li>
+        <li><strong>Save trained model to disk</strong> <span>— using joblib/pickle so it loads on server startup without retraining</span></li>
+        <li><strong>Integrate into analysis pipeline</strong> <span>— called automatically after parsing</span></li>
+      </ul>
+      <span class="deliverable">✓ Deliverable: Backend classifies uploaded email as PHISHING/LEGITIMATE with confidence score</span>
+    </div>
+  </div>
+
+  
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge p3">Phase 3</span>
+      <div>
+        <div class="phase-title">URL, Domain &amp; IP Intelligence</div>
+        <div class="phase-sub">Modules 5, 6, 7 — external intelligence gathering</div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <ul>
+        <li><strong>Build Module 5 — URL Analysis</strong> <span>— extract URLs, check length, HTTPS, login keywords, lookalike patterns, IP-based URLs</span></li>
+        <li><strong>Build Module 6 — Domain Intelligence</strong> <span>— use dnspython to query A/MX/NS/TXT records for each suspicious domain</span></li>
+        <li><strong>Build Module 7 — IP Intelligence</strong> <span>— extract IPs from Received headers, call ip-api.com (free) to get country/ISP/ASN</span></li>
+        <li><strong>Build Module 8 — Threat Correlation</strong> <span>— find shared IPs between domains, URLs, and routing headers</span></li>
+        <li><strong>Build Module 9 — Risk Scoring</strong> <span>— weighted scoring formula combining all module outputs into a 0-100 score with explanation list</span></li>
+        <li><strong>Extend API</strong> <span>— full analysis results returned in one GET /analysis/:caseId response</span></li>
+      </ul>
+      <span class="deliverable">✓ Deliverable: Complete analysis pipeline — every module runs end-to-end on one .eml upload</span>
+    </div>
+  </div>
+
+  
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge p4">Phase 4</span>
+      <div>
+        <div class="phase-title">React Frontend — Dashboard &amp; Upload UI</div>
+        <div class="phase-sub">Module 10 — investigation dashboard + file upload interface</div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <ul>
+        <li><strong>Set up React project</strong> <span>— Vite + React + Tailwind CSS, configure API base URL</span></li>
+        <li><strong>Build Upload Page</strong> <span>— drag-and-drop .eml upload, progress indicator, redirect to dashboard on completion</span></li>
+        <li><strong>Build Investigation Dashboard (Module 10)</strong> <span>— risk score badge, classification label, sender info, auth results panel, IP intelligence panel, threat indicators list</span></li>
+        <li><strong>Add Leaflet map</strong> <span>— show IP geolocation marker on OpenStreetMap with disclaimer text</span></li>
+        <li><strong>Add JWT authentication</strong> <span>— login page, protect dashboard routes, store token in localStorage</span></li>
+        <li><strong>Connect to FastAPI backend</strong> <span>— all data fetched via REST API calls</span></li>
+      </ul>
+      <span class="deliverable">✓ Deliverable: Full working web UI — upload email, see complete dashboard with map</span>
+    </div>
+  </div>
+
+  
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge p5">Phase 5</span>
+      <div>
+        <div class="phase-title">Investigation Graph &amp; PDF Report</div>
+        <div class="phase-sub">Modules 11 &amp; 13 — visualization and report generation</div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <ul>
+        <li><strong>Build Module 11 — Investigation Graph</strong> <span>— use React Flow or Cytoscape.js, build nodes for Email/Domain/URL/IP/ISP, draw edges from correlation data</span></li>
+        <li><strong>Build Module 13 — PDF Report (backend)</strong> <span>— use ReportLab to generate a structured multi-section PDF from analysis data</span></li>
+        <li><strong>Add "Generate Report" button on dashboard</strong> <span>— calls GET /report/:caseId, downloads PDF file</span></li>
+        <li><strong>Polish dashboard UI</strong> <span>— final styling, responsive layout, loading states, error handling</span></li>
+      </ul>
+      <span class="deliverable">✓ Deliverable: Click one button → download a professional forensic PDF report; see investigation graph</span>
+    </div>
+  </div>
+
+  
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-badge p6">Phase 6</span>
+      <div>
+        <div class="phase-title">Testing, Refinement &amp; Deployment</div>
+        <div class="phase-sub">End-to-end testing + deploy frontend to Vercel + backend to Render</div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <ul>
+        <li><strong>Test with real-world sample emails</strong> <span>— phishing, legitimate, spear-phishing, spoofed — verify correct classifications</span></li>
+        <li><strong>Tune risk scoring weights</strong> <span>— adjust per-module contribution based on test results</span></li>
+        <li><strong>Deploy backend to Render</strong> <span>— push to GitHub, connect Render, set environment variables (MongoDB URI, API keys)</span></li>
+        <li><strong>Deploy frontend to Vercel</strong> <span>— connect GitHub repo, set REACT_APP_API_URL to Render backend URL</span></li>
+        <li><strong>Final end-to-end demo walkthrough</strong> <span>— test all 12 steps of the complete user workflow</span></li>
+        <li><strong>Write README.md</strong> <span>— setup instructions, architecture overview, how to run locally</span></li>
+      </ul>
+      <span class="deliverable">✓ Deliverable: Fully deployed, publicly accessible platform ready for project demonstration</span>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  
+  <h2>Phase Summary</h2>
+  <table>
+    <thead><tr><th>Phase</th><th>What Gets Built</th><th>Modules Covered</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Phase 1</strong></td><td>Backend + Email Parsing + Database</td><td>1, 2, 3, 12</td></tr>
+      <tr><td><strong>Phase 2</strong></td><td>AI/ML Phishing Detection Model</td><td>4</td></tr>
+      <tr><td><strong>Phase 3</strong></td><td>URL / Domain / IP Intelligence + Risk Score</td><td>5, 6, 7, 8, 9</td></tr>
+      <tr><td><strong>Phase 4</strong></td><td>React Frontend + Dashboard + Map</td><td>10</td></tr>
+      <tr><td><strong>Phase 5</strong></td><td>Investigation Graph + PDF Report</td><td>11, 13</td></tr>
+      <tr><td><strong>Phase 6</strong></td><td>Testing + Deployment</td><td>All</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sep"></div>
+
+  
+  <h2>How to Use the Final Platform</h2>
+  <ol style="padding-left:20px;font-size:13.5px;color:#1f2328;line-height:2">
+    <li>Open the web application in your browser.</li>
+    <li>Log in with your analyst credentials.</li>
+    <li>Click <strong>"Upload Email"</strong> and select a <code>.eml</code> file (any suspicious email saved from an email client).</li>
+    <li>The system automatically runs all 13 modules in the background (takes a few seconds).</li>
+    <li>You are redirected to the <strong>Investigation Dashboard</strong> showing the full analysis result.</li>
+    <li>Review the risk score, classification, authentication failures, suspicious URLs, and IP intelligence.</li>
+    <li>Zoom into the <strong>map</strong> to see approximate geolocation of mail infrastructure.</li>
+    <li>Click the <strong>Investigation Graph</strong> tab to see how all indicators are connected.</li>
+    <li>Click <strong>"Generate Forensic Report"</strong> to download a PDF containing the complete investigation.</li>
+  </ol>
+
+  <div class="sep"></div>
+
+  
+  <h2>Why This Project Matters</h2>
+  <p>Email phishing is the #1 initial attack vector in cybersecurity. Most organizations rely on manual investigation or expensive commercial tools. This platform demonstrates how AI, NLP, network forensics, and infrastructure intelligence can be combined into an open, explainable, investigative assistant that any analyst can use — making it both a strong academic project and a realistic prototype of a real security product.</p>
+
+  <div class="footer">Made with IBM Bob</div>
+</div>
+</body>
+</html>

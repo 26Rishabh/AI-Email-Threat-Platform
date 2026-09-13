@@ -1,0 +1,15 @@
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+pymongo==4.7.2
+dnspython==2.6.1
+python-dotenv==1.0.1
+pydantic==2.7.1
+email-validator==2.1.1
+requests==2.32.2
+reportlab==4.2.0
+PyJWT==2.8.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+scikit-learn==1.4.2
+numpy==1.26.4

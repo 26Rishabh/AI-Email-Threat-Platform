@@ -1,0 +1,38 @@
+From: "GitHub Notifications" <noreply@github.com>
+To: developer@example.com
+Subject: [GitHub] Your pull request was merged
+Date: Tue, 11 Jun 2024 14:10:00 +0000
+Message-ID: <20240611141000.xyz123@github.com>
+Reply-To: noreply@github.com
+Return-Path: <noreply@github.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: GitHub Notifications
+Authentication-Results: mx.example.com;
+   spf=pass (example.com: domain of noreply@github.com designates 192.30.252.1 as permitted sender)
+   dkim=pass header.i=@github.com;
+   dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=github.com
+Received: from mail-out.github.com (mail-out.github.com [192.30.252.1])
+        by mx.example.com with ESMTPS id abc456def;
+        Tue, 11 Jun 2024 14:10:00 +0000
+Received: from github.com (internal.github.com [10.0.0.1])
+        by mail-out.github.com with ESMTP id gh-notify-789;
+        Tue, 11 Jun 2024 14:09:58 +0000
+
+Hi developer,
+
+Your pull request #42 "Fix authentication bug" in repository 
+myorg/myapp has been successfully merged into the main branch.
+
+View the merged pull request:
+https://github.com/myorg/myapp/pull/42
+
+Repository: myorg/myapp
+Branch: main
+Merged by: teamlead
+
+You are receiving this because you submitted the pull request.
+To unsubscribe from these notifications, visit your notification settings.
+
+GitHub, Inc.
+88 Colin P Kelly Jr St, San Francisco, CA 94107
