@@ -1,6 +1,6 @@
 // src/pages/LoginPage.jsx
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Shield, Mail, Lock, AlertCircle } from 'lucide-react'
 import { login } from '../api/client'
 import { useAuth } from '../context/AuthContext'
@@ -94,8 +94,13 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-slate-500 text-xs text-center mt-6">
-            Default credentials: <span className="text-slate-300">admin / admin123</span>
+      
+          <p className="text-slate-500 text-sm text-center mt-4">
+             Don't have an account?{' '}
+             <Link to="/register"
+              className="text-blue-400 hover:text-blue-300 font-medium" >
+              Create Account
+            </Link>
           </p>
         </div>
       </div>

@@ -45,6 +45,9 @@ client.interceptors.response.use(
 export const login = (username, password) =>
   client.post('/api/auth/login', { username, password })
 
+export const register = (username, password, full_name) =>
+  client.post('/api/auth/register', { username, password, full_name })
+
 export const getMe = () => client.get('/api/auth/me')
 
 // ── Analysis ─────────────────────────────────

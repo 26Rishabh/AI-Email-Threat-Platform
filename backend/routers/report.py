@@ -9,17 +9,18 @@
 #        and streams it back to the browser as a
 #        downloadable file.
 # ─────────────────────────────────────────────
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import Response
 
 from database.connection import get_db
+from routers.auth import get_current_user
 from modules.report_generator import generate_pdf_report
 
 router = APIRouter(prefix="/api", tags=["Report"])
 
 
 @router.get("/report/{case_id}")
-async def get_forensic_report(case_id: str):
+async def get_forensic_report(case_id: str,  username: str = Depends(get_current_user)):
     """
     Generates and returns a PDF forensic report for a given case.
 
@@ -31,7 +32,7 @@ async def get_forensic_report(case_id: str):
     """
     # Fetch the analysis from MongoDB
     db  = get_db()
-    doc = db.analyses.find_one({"case_id": case_id}, {"_id": 0})
+    doc = db.analyses.find_one({"case_id": case_id, "username": username}, {"_id": 0})
     if not doc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

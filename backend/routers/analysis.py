@@ -14,11 +14,12 @@
 #  interactive API docs at /docs — very handy for
 #  development and testing.
 # ─────────────────────────────────────────────
-from fastapi import APIRouter, UploadFile, File, HTTPException, status
+from fastapi import APIRouter, UploadFile, File, HTTPException, status, Depends
 from fastapi.responses import JSONResponse
 from datetime import datetime, timezone
 
 from database.connection import get_db
+from routers.auth import get_current_user
 from modules.email_parser import parse_email
 from modules.header_forensics import analyze_headers
 from modules.auth_analysis import analyze_authentication
@@ -35,7 +36,8 @@ router = APIRouter(prefix="/api", tags=["Analysis"])
 
 # ── POST /api/analyze ─────────────────────────
 @router.post("/analyze", status_code=status.HTTP_201_CREATED)
-async def analyze_email(file: UploadFile = File(...)):
+async def analyze_email(file: UploadFile = File(...),
+            username: str = Depends(get_current_user)):
     """
     Main analysis endpoint.
 
@@ -116,6 +118,7 @@ async def analyze_email(file: UploadFile = File(...)):
     # ── Assemble analysis document ────────────
     analysis_doc = {
         "case_id":    case_id,
+        "username":   username,
         "filename":   filename,
         "evidence":   evidence,
 
@@ -251,14 +254,15 @@ async def analyze_email(file: UploadFile = File(...)):
 
 # ── GET /api/analysis/{case_id} ───────────────
 @router.get("/analysis/{case_id}")
-async def get_analysis(case_id: str):
+async def get_analysis(case_id: str,
+            username: str = Depends(get_current_user)):
     """
     Retrieves a stored analysis by its Case ID.
 
     The frontend uses this to load the investigation dashboard.
     """
     db  = get_db()
-    doc = db.analyses.find_one({"case_id": case_id}, {"_id": 0})
+    doc = db.analyses.find_one({"case_id": case_id,  "username": username}, {"_id": 0})
     if not doc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -269,7 +273,7 @@ async def get_analysis(case_id: str):
 
 # ── GET /api/cases ────────────────────────────
 @router.get("/cases")
-async def list_cases(limit: int = 20, skip: int = 0):
+async def list_cases(limit: int = 20, skip: int = 0,  username: str = Depends(get_current_user)):
     """
     Lists all stored cases, most recent first.
 
@@ -279,7 +283,7 @@ async def list_cases(limit: int = 20, skip: int = 0):
     db   = get_db()
     docs = list(
         db.analyses.find(
-            {},
+            {"username": username},
             {
                 "_id":      0,
                 "case_id":  1,
@@ -298,17 +302,18 @@ async def list_cases(limit: int = 20, skip: int = 0):
         .skip(skip)
         .limit(limit)
     )
-    return {"cases": docs, "total": db.analyses.count_documents({})}
+    return {"cases": docs, "total": db.analyses.count_documents({"username": username})}
 
 
 # ── DELETE /api/analysis/{case_id} ────────────
 @router.delete("/analysis/{case_id}", status_code=status.HTTP_200_OK)
-async def delete_analysis(case_id: str):
+async def delete_analysis(case_id: str,
+            username: str = Depends(get_current_user)):
     """
     Deletes a case from the database.
     """
     db     = get_db()
-    result = db.analyses.delete_one({"case_id": case_id})
+    result = db.analyses.delete_one({"case_id": case_id, "username": username})
     if result.deleted_count == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
